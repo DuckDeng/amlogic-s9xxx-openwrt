@@ -19,7 +19,7 @@ echo "DISTRIB_SOURCECODE='official'" >>package/base-files/files/etc/openwrt_rele
 # sed -i 's/192.168.1.1/10.0.0.50/g' package/base-files/files/bin/config_generate
 #
 # ------------------------------- Main source ends -------------------------------
-# Create custom network configuration（默认LAN改为 10.0.0.50）
+
 mkdir -p files/etc/config
 cat > files/etc/config/network << 'EOF'
 config interface 'loopback'
@@ -48,6 +48,7 @@ git clone https://github.com/ophub/luci-app-amlogic.git package/luci-app-amlogic
 # Add OpenClash
 rm -rf package/luci-app-openclash
 git clone --depth=1 https://github.com/vernesong/OpenClash.git package/luci-app-openclash
+echo "CONFIG_PACKAGE_luci-app-openclash=y" >> .config
 #
 # Apply patch
 # git apply ../config/patches/{0001*,0002*}.patch --directory=feeds/luci
