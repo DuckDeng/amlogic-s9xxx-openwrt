@@ -45,11 +45,7 @@ EOF
 # Add luci-app-amlogic
 rm -rf package/luci-app-amlogic
 git clone https://github.com/ophub/luci-app-amlogic.git package/luci-app-amlogic
-# Add OpenClash
-rm -rf package/luci-app-openclash
-git clone --depth=1 https://github.com/vernesong/OpenClash.git package/luci-app-openclash
-echo "CONFIG_PACKAGE_luci-app-openclash=y" >> .config
-#
+
 # Apply patch
 # git apply ../config/patches/{0001*,0002*}.patch --directory=feeds/luci
 #
