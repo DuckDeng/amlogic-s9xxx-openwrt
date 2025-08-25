@@ -16,8 +16,28 @@ sed -i "s|DISTRIB_REVISION='.*'|DISTRIB_REVISION='R$(date +%Y.%m.%d)'|g" package
 echo "DISTRIB_SOURCECODE='official'" >>package/base-files/files/etc/openwrt_release
 
 # Modify default IP（FROM 192.168.1.1 CHANGE TO 192.168.31.4）
-# sed -i 's/192.168.1.1/192.168.31.4/g' package/base-files/files/bin/config_generate
+# sed -i 's/192.168.1.1/10.0.0.50/g' package/base-files/files/bin/config_generate
 #
+# ------------------------------- Main source ends -------------------------------
+# Create custom network configuration（默认LAN改为 10.0.0.50）
+mkdir -p files/etc/config
+cat > files/etc/config/network << 'EOF'
+config interface 'loopback'
+	option ifname 'lo'
+	option proto 'static'
+	option ipaddr '127.0.0.1'
+	option netmask '255.0.0.0'
+
+config interface 'lan'
+	option type 'bridge'
+	option ifname 'eth0'
+	option proto 'static'
+	option ipaddr '10.0.0.50'
+	option netmask '255.255.255.0'
+	option gateway '10.0.0.1'
+	option dns '10.0.0.1'
+EOF
+
 # ------------------------------- Main source ends -------------------------------
 
 # ------------------------------- Other started -------------------------------
@@ -25,6 +45,9 @@ echo "DISTRIB_SOURCECODE='official'" >>package/base-files/files/etc/openwrt_rele
 # Add luci-app-amlogic
 rm -rf package/luci-app-amlogic
 git clone https://github.com/ophub/luci-app-amlogic.git package/luci-app-amlogic
+# Add OpenClash
+rm -rf package/luci-app-openclash
+git clone --depth=1 https://github.com/vernesong/OpenClash.git package/luci-app-openclash
 #
 # Apply patch
 # git apply ../config/patches/{0001*,0002*}.patch --directory=feeds/luci
